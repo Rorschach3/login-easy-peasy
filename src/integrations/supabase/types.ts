@@ -180,7 +180,13 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      get_teams_for_user: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          team_id: number
+          team_name: string
+        }[]
+      }
     }
     Enums: {
       [_ in never]: never

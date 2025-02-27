@@ -1,7 +1,7 @@
 
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Facebook, Twitter, Linkedin } from "lucide-react";
+import { Facebook, Twitter } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
@@ -80,15 +80,6 @@ const Login = () => {
           >
             <Twitter className="h-5 w-5 text-sky-500" />
             Continue with Twitter
-          </Button>
-
-          <Button 
-            variant="outline" 
-            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-slate-800"
-            onClick={() => handleSocialLogin('linkedin_oidc')}
-          >
-            <Linkedin className="h-5 w-5 text-blue-700" />
-            Continue with LinkedIn
           </Button>
 
           <Button 
