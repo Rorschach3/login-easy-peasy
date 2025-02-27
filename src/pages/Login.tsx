@@ -4,7 +4,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Facebook, Twitter, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -12,6 +12,7 @@ const Login = () => {
 
   const handleSocialLogin = async (provider: 'facebook' | 'twitter' | 'linkedin' | 'google') => {
     try {
+      console.log(`Attempting to login with ${provider}`);
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
         options: {
@@ -21,13 +22,20 @@ const Login = () => {
       });
 
       if (error) {
+        console.error("Auth error:", error);
         toast({
           variant: "destructive",
           title: "Authentication Error",
           description: error.message,
         });
+      } else {
+        toast({
+          title: "Connecting to " + provider,
+          description: "Please wait while we connect your account...",
+        });
       }
     } catch (error) {
+      console.error("Login error:", error);
       toast({
         variant: "destructive",
         title: "Authentication Error",
@@ -37,16 +45,16 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900 py-12 px-4 sm:px-6 lg:px-8">
-      <Card className="w-full max-w-md">
-        <CardHeader className="text-center">
+    <div className="min-h-screen flex items-center justify-center bg-background text-foreground p-4">
+      <Card className="w-full max-w-md border-border">
+        <CardHeader className="text-center space-y-2">
           <CardTitle className="text-2xl font-bold">Welcome Back</CardTitle>
           <CardDescription>Connect your social accounts</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 hover:bg-blue-50"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-slate-800"
             onClick={() => handleSocialLogin('facebook')}
           >
             <Facebook className="h-5 w-5 text-blue-600" />
@@ -55,7 +63,7 @@ const Login = () => {
 
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 hover:bg-sky-50"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-sky-50 dark:bg-slate-900 dark:hover:bg-slate-800"
             onClick={() => handleSocialLogin('twitter')}
           >
             <Twitter className="h-5 w-5 text-sky-500" />
@@ -64,7 +72,7 @@ const Login = () => {
 
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 hover:bg-blue-50"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-slate-800"
             onClick={() => handleSocialLogin('linkedin')}
           >
             <Linkedin className="h-5 w-5 text-blue-700" />
@@ -73,7 +81,7 @@ const Login = () => {
 
           <Button 
             variant="outline" 
-            className="w-full flex items-center justify-center gap-2 hover:bg-red-50"
+            className="w-full flex items-center justify-center gap-2 bg-white hover:bg-red-50 dark:bg-slate-900 dark:hover:bg-slate-800"
             onClick={() => handleSocialLogin('google')}
           >
             <svg viewBox="0 0 24 24" className="h-5 w-5" aria-hidden="true">
