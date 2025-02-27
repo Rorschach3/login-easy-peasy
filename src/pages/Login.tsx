@@ -13,12 +13,28 @@ const Login = () => {
   const handleSocialLogin = async (provider: 'facebook' | 'twitter' | 'linkedin' | 'google') => {
     try {
       console.log(`Attempting to login with ${provider}`);
+      
+      // Configure provider-specific options
+      let options = {
+        redirectTo: `${window.location.origin}/dashboard`,
+      };
+      
+      // Add provider-specific scopes
+      if (provider === 'google') {
+        options = {
+          ...options,
+          scopes: 'email profile',
+        };
+      } else if (provider === 'github') {
+        options = {
+          ...options,
+          scopes: 'read:user user:email',
+        };
+      }
+      
       const { error } = await supabase.auth.signInWithOAuth({
         provider,
-        options: {
-          redirectTo: `${window.location.origin}/dashboard`,
-          scopes: 'read:user user:email',
-        },
+        options,
       });
 
       if (error) {
