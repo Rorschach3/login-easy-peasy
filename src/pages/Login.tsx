@@ -5,30 +5,26 @@ import { Facebook, Twitter, Linkedin } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { supabase } from "@/lib/supabase";
 import { useToast } from "@/hooks/use-toast";
+import { Provider } from "@supabase/supabase-js";
 
 const Login = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSocialLogin = async (provider: 'facebook' | 'twitter' | 'linkedin' | 'google') => {
+  const handleSocialLogin = async (provider: Provider) => {
     try {
       console.log(`Attempting to login with ${provider}`);
       
       // Configure provider-specific options
-      let options = {
+      const options: { redirectTo: string; queryParams?: { [key: string]: string } } = {
         redirectTo: `${window.location.origin}/dashboard`,
       };
       
-      // Add provider-specific scopes
+      // Add provider-specific query parameters if needed
       if (provider === 'google') {
-        options = {
-          ...options,
-          scopes: 'email profile',
-        };
-      } else if (provider === 'github') {
-        options = {
-          ...options,
-          scopes: 'read:user user:email',
+        options.queryParams = {
+          access_type: 'offline',
+          prompt: 'consent',
         };
       }
       
@@ -89,7 +85,7 @@ const Login = () => {
           <Button 
             variant="outline" 
             className="w-full flex items-center justify-center gap-2 bg-white hover:bg-blue-50 dark:bg-slate-900 dark:hover:bg-slate-800"
-            onClick={() => handleSocialLogin('linkedin')}
+            onClick={() => handleSocialLogin('linkedin_oidc')}
           >
             <Linkedin className="h-5 w-5 text-blue-700" />
             Continue with LinkedIn
